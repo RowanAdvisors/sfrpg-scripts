@@ -1,0 +1,28 @@
+{
+  "_id": "FBwmIHGln90B1GAY",
+  "name": "Autotarget Rifle:Full Auto",
+  "type": "script",
+  "sort": 100001,
+  "flags": {
+    "sfrpg": {
+      "itemMacro": true
+    },
+    "combat-utility-belt": {
+      "macroTrigger": ""
+    },
+    "furnace": {
+      "runAsGM": false
+    },
+    "exportSource": {
+      "world": "edge-of-discovery",
+      "system": "sfrpg",
+      "coreVersion": "0.7.9",
+      "systemVersion": "0.9.0.0"
+    }
+  },
+  "scope": "global",
+  "command": "let itemName = \"Autotarget rifle\";\nif (speaker.token) actor = game.actors.tokens[speaker.token];\n    if (!actor) actor = game.actors.get(speaker.actor);\n    let item = actor ? actor.items.find(i => i.name === itemName) : null;\n    if (!item) return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);\n    let usage = item._data.data.capacity.value;\n    if(usage > 0) {\n        let content = `<p>squeezes the trigger:<br/>[[1d20 + @abilities.dex.mod + @attributes.baseAttackBonus.value - 4]] to hit for [[1d6 + @details.level.value]] damage<p>`;\n        usage--;\n        usage--;\n        while(usage > 1) {\n            content += `<p>keeps holding the trigger:<br/>[[1d20 + @abilities.dex.mod + @attributes.baseAttackBonus.value - 4]] to hit for [[1d6 + @details.level.value]] damage<p>`;\n        usage--;\n        usage--;\n        }\n        content += `<p>is finallay out of ammo</p>`;\n        ChatMessage.create({\n          speaker: speaker,\n          flavor: \"Autotarget Rifle:Full Auto\",\n          content: content,\n          type: CONST.CHAT_MESSAGE_TYPES.OTHER\n        });\n        \n    }\n    \n    \n    actor.updateEmbeddedEntity(\"OwnedItem\", {\n                _id: item.data._id,\n                \"data.capacity.value\": 0\n            }, {});",
+  "author": "j4CnOhZoXVMGbKuU",
+  "img": "systems/sfrpg/icons/equipment/weapons/needler-rifle.jpg",
+  "actorIds": []
+}
